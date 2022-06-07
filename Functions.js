@@ -613,3 +613,283 @@
 // let sayHi = function (who) {
 //   alert(`Hello, ${who}`);
 // };
+
+//////////////////////////////////////////////todo
+//*          New Function Syntax
+//////////////////////////////////////////////todo
+
+//* syntax
+
+// let func = new function([arg1,arg2,arg3],functionBody);
+
+//* function with 2 arguments
+
+// let sum = new Function("a", "b", "return a + b");
+// console.log(sum(2, 4));
+
+//* function without arguments
+
+// let str = "recieve from server";
+// let func = new function(str);
+// func(); //! without are arguments
+
+//* closures
+
+// function getFunc() {
+//   let value = "test";
+//   let func = function('alert(value)'); //! error
+//   return func;
+// }
+// getFunc()();
+
+//* regular/pure function
+
+// function getFunc() {
+//   let value = "test";
+//   let func = function () {
+//     alert(value);
+//   };
+//   return func;
+// }
+// getFunc()();
+
+//////////////////////////////////////////////todo
+//*         SetTimeout and SetInterval
+//////////////////////////////////////////////todo
+
+//? SetTimeout
+//* syntax
+
+// let timerId = setTimeout("func|code", "[delay]", [arg1], [arg2]);
+
+//* example
+
+// function sayHi() {
+//   alert("hi there");
+// }
+// setTimeout(sayHi, 3000);
+
+//* example-2 (with parameters)
+
+// function sayHi(firstName, lastName) {
+//   console.log("hello " + firstName + " " + lastName);
+// }
+// setTimeout(sayHi, 3000, "Akshay", "Achuthan");
+
+// setTimeout("alert('Hello')", 1000);
+// setTimeout(() => alert("Hello"), 2000);
+
+//! wrong syntax
+// setTimeout(sayHi(), 4000);
+
+//* Canceling with clear Timeout
+//* syntax
+
+// let timerId = setTimeout(...);
+// clearTimeout(timerId);
+
+//* example
+
+// let timerId = setTimeout(() => alert("hello there"), 2000);
+// alert(timerId);
+
+// clearTimeout(timerId); //! clears/stops the setTimeout
+// alert(timerId);
+
+//? SetInterval
+//* syntax
+
+// let timerId = setTimeout("func|code", "[delay]", [arg1], [arg2]);
+
+//* example
+
+// let timerId = setInterval(() => alert("Hello"), 2000);
+
+// setTimeout(() => {
+//   clearInterval(timerId);
+//   alert("stop");
+// }, 5000);
+
+//? Nested setTimeout
+
+/** instead of:
+let timerId = setInterval(() => alert('tick'), 2000);
+*/
+
+//* example
+
+// let timerId = setTimeout(function tick() {
+//   alert("tick");
+//   timerId = setTimeout(tick, 2000); // (*)
+// }, 2000);
+
+//? zero delay setTimeout (default)
+
+// setTimeout(() => alert("world")); //! then this
+// alert("hello"); //! this runs first
+
+// let start = Date.now();
+// console.log(start);
+// let times = [];
+// console.log(times);
+
+// setTimeout(function run() {
+//   times.push(Date.now() - start);
+
+//   if (start + 100 < Date.now()) alert(times);
+//   else setTimeout(run);
+// });
+
+//////////////////////////////////////////////todo
+//*       Decorators and forwarding (call/apply)
+//////////////////////////////////////////////todo
+
+//* (Transparent caching, func.call, multi-argumets, func.apply, Borrowing a method,)
+
+//* Task-1 (spy decorators)
+
+// function spy(func) {
+//   function wrapper(...args) {
+//     wrapper.calls.push(args);
+//     return func.apply(this, args);
+//   }
+
+//   wrapper.calls = [];
+
+//   return wrapper;
+// }
+
+//* Task-2 (Delaying decorators)
+
+// function delay(f, ms) {
+//   return function (...args) {
+//     let savedThis = this; // store this into an intermediate variable
+//     setTimeout(function () {
+//       f.apply(savedThis, args); // use it here
+//     }, ms);
+//   };
+// }
+
+//////////////////////////////////////////////todo
+//*        Function Binding
+//////////////////////////////////////////////todo
+
+//* Losing this
+//* example
+
+// let user = {
+//   firstName: "john",
+//   sayHi() {
+//     alert(`hello, ${this.firstName}`);
+//   },
+// };
+// setTimeout(user.sayHi, 1000); //! error
+
+// console.log(user.sayHi());
+
+//* solution 1 (wrapper)
+
+// let user = {
+//   firstName: "John",
+//   sayHi() {
+//     alert(`Hello, ${this.firstName}!`);
+//   },
+// };
+// setTimeout(() => user.sayHi(), 1000);
+// user = {
+//   sayHi() {
+//     alert("Another user in setTimeout!");
+//   },
+// };
+
+//* solution (Bind)
+
+// let user = {
+//   firstName: "john",
+//   say(phrase) {
+//     console.log(`${phrase},${this.firstName}`);
+//   },
+// };
+
+// let say = user.say.bind(user);
+// say("hello");
+// say("Bye");
+
+//* partial function
+//* binding arguments
+
+// function mul(a, b) {
+//   return a * b;
+// }
+// let double = mul.bind(null, 2);
+// console.log(double(3));
+// console.log(double(4));
+// console.log(double(5));
+
+//* Bound function as a method
+
+// function f() {
+//   alert( this ); // null
+// }
+// let user = {
+//   g: f.bind(null)
+// };
+// user.g();
+
+//* second Bind
+
+// function f() {
+//   alert(this.name);
+// }
+// f = f.bind( {name: "John"} ).bind( {name: "Pete"} );
+// f();
+
+//* function property after bind
+
+// function sayHi() {
+//   alert( this.name );
+// }
+// sayHi.test = 5;
+// let bound = sayHi.bind({
+//   name: "John"
+// });
+// alert( bound.test );
+
+//* fix a function that loses "this"
+
+// function askPassword(ok, fail) {
+//   let password = prompt("Password?", "");
+//   if (password == "rockstar") ok();
+//   else fail();
+// }
+// let user = {
+//   name: "John",
+
+//   loginOk() {
+//     alert(`${this.name} logged in`);
+//   },
+
+//   loginFail() {
+//     alert(`${this.name} failed to log in`);
+//   },
+// };
+// askPassword(user.loginOk.bind(user), user.loginFail.bind(user));
+
+//* Partial application for login
+
+// function askPassword(ok, fail) {
+//   let password = prompt("Password?", "");
+//   if (password == "rockstar") ok();
+//   else fail();
+// }
+// let user = {
+//   name: "John",
+
+//   login(result) {
+//     alert(this.name + (result ? " logged in" : " failed to log in"));
+//   },
+// };
+// askPassword(
+//   () => user.login(true),
+//   () => user.login(false)
+// );
