@@ -129,7 +129,7 @@
 // clock.start();
 
 ////////////////////////////////////////////*
-//!            class inheritance
+//!          class inheritance
 ////////////////////////////////////////////*
 
 //* example
@@ -154,6 +154,7 @@ class Animal {
 let animal = new Animal("My Animal");
 
 //! rabbit has access to animal methods an its own methods
+//!test 
 class Rabbit extends Animal {
   hide() {
     alert(`${this.name} hides!`);
